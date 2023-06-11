@@ -63,7 +63,7 @@ function debounce<T extends (...args: any[]) => void>(
   } as T
 }
 
-const createCanvas = (canvasIdentifier: string) => {
+function createCanvas(canvasIdentifier: string) {
   const canvas = document.createElement('canvas')
   canvas.width = window.innerWidth
   canvas.height = window.innerHeight
@@ -75,7 +75,7 @@ const createCanvas = (canvasIdentifier: string) => {
   return canvas
 }
 
-const registerComponent = (uuid: string, color: string) => {
+function registerComponent(uuid: string, color: string) {
   if (map.has(uuid)) return
   const componentOptions = {
     elementsRef: [],
@@ -84,7 +84,7 @@ const registerComponent = (uuid: string, color: string) => {
   map.set(uuid, componentOptions)
 }
 
-const registerElements = (uuid: string, ...elems: VueDomElement[]) => {
+function registerElements(uuid: string, ...elems: VueDomElement[]) {
   const componentOptions = map.get(uuid)
   componentOptions.elementsRef = [
     ...elems.map((el) => new WeakRef(el)),
@@ -93,7 +93,24 @@ const registerElements = (uuid: string, ...elems: VueDomElement[]) => {
   map.set(uuid, componentOptions)
 }
 
-const addItems = () => {
+function isElementVisibleInWindow(
+  rect: DOMRect,
+  { windowHeight, windowWidth }: { windowHeight: number; windowWidth: number }
+) {
+  const topVisibleThreshold = -1
+  const bottomVisibleThreshold = windowHeight - 1
+  const leftVisibleThreshold = -1
+  const rightVisibleThreshold = windowWidth - 1
+
+  return (
+    rect.top < bottomVisibleThreshold &&
+    rect.bottom > topVisibleThreshold &&
+    rect.left < rightVisibleThreshold &&
+    rect.right > leftVisibleThreshold
+  )
+}
+
+function addItems() {
   const windowHeight =
     window.innerHeight || document.documentElement.clientHeight
   const windowWidth = window.innerWidth || document.documentElement.clientWidth
@@ -105,17 +122,7 @@ const addItems = () => {
 
       const rect = el.getBoundingClientRect()
 
-      const topVisibleThreshold = -1
-      const bottomVisibleThreshold = windowHeight - 1
-      const leftVisibleThreshold = -1
-      const rightVisibleThreshold = windowWidth - 1
-
-      if (
-        rect.top < bottomVisibleThreshold &&
-        rect.bottom > topVisibleThreshold &&
-        rect.left < rightVisibleThreshold &&
-        rect.right > leftVisibleThreshold
-      ) {
+      if (isElementVisibleInWindow(rect, { windowHeight, windowWidth })) {
         const options = {
           top: rect.top,
           left: rect.left,
@@ -137,8 +144,6 @@ export function createRenderPaintFlashingPlugin(
 ): Plugin {
   return {
     install(app) {
-      let isRunning = false
-
       const {
         startImmediately = true,
         toggleOnOffKeybordProps = {
@@ -149,6 +154,8 @@ export function createRenderPaintFlashingPlugin(
         uuidIdentifier = 'vue3_rendering_uuid_identifier',
         color = 'green',
       } = options
+
+      let isRunning = startImmediately
 
       const getCanvas = () =>
         document.querySelector(`[data-${canvasIdentifier}]`)
@@ -209,14 +216,13 @@ export function createRenderPaintFlashingPlugin(
           ([key, value]) => event[key] === value
         )
 
-        if (shouldToggle) {
-          const canvas = getCanvas()
+        if (!shouldToggle) return
 
-          if (canvas) {
-            stop()
-          } else {
-            start()
-          }
+        const canvas = getCanvas()
+        if (canvas) {
+          stop()
+        } else {
+          start()
         }
       })
 
