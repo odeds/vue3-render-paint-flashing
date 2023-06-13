@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite -c vite.dev.config.ts",
     "build": "vite build && vue-tsc --emitDeclarationOnly --allowJs false --checkJs false && mv dist/src dist/types",
     "preview": "vite preview"
   },
