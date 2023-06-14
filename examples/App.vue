@@ -10,6 +10,7 @@
 </template>
 
 <script>
+//@ts-nocheck
 import Table from './Table.vue'
 
 export default {

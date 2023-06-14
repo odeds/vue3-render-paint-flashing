@@ -4,13 +4,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite -c vite.dev.config.ts",
-    "build": "vite build && vue-tsc --emitDeclarationOnly --allowJs false --checkJs false && mv dist/src dist/types",
+    "build": "vite build && vue-tsc --emitDeclarationOnly --allowJs false --checkJs false",
     "preview": "vite preview"
   },
   "files": [
     "dist"
   ],
-  "types": "./dist/types/main.d.ts",
+  "types": "./dist/main.d.ts",
   "main": "./dist/vue3-render-paint-flashing.umd.cjs",
   "module": "./dist/vue3-render-paint-flashing.js",
   "exports": {

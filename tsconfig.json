@@ -13,5 +13,7 @@
     "isolatedModules": true,
     "declaration": true,
     "outDir": "dist"
-  }
+  },
+  "include": ["env.d.ts", "src/**/*"],
+  "exclude": ["examples/**/*"],
 }
