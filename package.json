@@ -1,6 +1,6 @@
 {
   "name": "vue3-render-paint-flashing",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "scripts": {
     "dev": "vite -c vite.dev.config.ts",
