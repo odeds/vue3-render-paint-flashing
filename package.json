@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "vite -c vite.dev.config.ts",
     "build": "vite build && vue-tsc --emitDeclarationOnly --allowJs false --checkJs false",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "npx playwright test"
   },
   "files": [
     "dist"
@@ -20,6 +21,7 @@
     }
   },
   "devDependencies": {
+    "@playwright/test": "^1.35.1",
     "@types/node": "^20.2.5",
     "@vitejs/plugin-vue": "^4.2.3",
     "prettier": "2.8.8",
