@@ -20,6 +20,8 @@
       "require": "./dist/vue3-render-paint-flashing.umd.cjs"
     }
   },
+  "license": "MIT",
+  "homepage": "https://github.com/odeds/vue3-render-paint-flashing/blob/main/README.md",
   "devDependencies": {
     "@playwright/test": "^1.35.1",
     "@types/node": "^20.2.5",
