@@ -4,7 +4,6 @@
  * @property {number} left
  * @property {number} width
  * @property {number} height
- * @property {string} color
  * @property {number | undefined} startTimestamp
  */
 
@@ -12,6 +11,8 @@
 let canvas
 /** @type {OffscreenCanvasRenderingContext2D} */
 let ctx
+/** @type {string} */
+let color
 /** @type {number} */
 let requestID
 /** @type {Record<string, Set<RenderOptions>>} */
@@ -34,7 +35,7 @@ function areEqualShallow(a, b) {
 /**
  * @param {string} key
  * @param {Record<string, any>} obj
- * @returns
+ * @returns {Record<string, any>}
  */
 function omit(key, obj) {
   const { [key]: omitted, ...rest } = obj
@@ -44,10 +45,12 @@ function omit(key, obj) {
 /**
  * @param {object} data
  * @param {OffscreenCanvas} data.canvas
+ * @param {string} data.color
  */
 const onStart = (data) => {
   canvas = data.canvas
   ctx = canvas.getContext('2d')
+  color = data.color
 
   /**
    * @param {number} timestamp
@@ -63,10 +66,10 @@ const onStart = (data) => {
         const elapsed = timestamp - options.startTimestamp
         ctx.globalAlpha = Math.min((elapsed / 500) * 0.25, 0.25)
         ctx.lineWidth = 1
-        ctx.fillStyle = options.color
+        ctx.fillStyle = color
         ctx.fillRect(options.left, options.top, options.width, options.height)
         ctx.globalAlpha = 1
-        ctx.strokeStyle = options.color
+        ctx.strokeStyle = color
         ctx.strokeRect(options.left, options.top, options.width, options.height)
         if (elapsed > 500) {
           curSet.delete(options)
@@ -133,7 +136,7 @@ onmessage = (evt) => {
 
   if (type === 'start') {
     onStart(data)
-  } else if (type == 'addItem') {
+  } else if (type === 'addItem') {
     onAddItem(data)
   } else if (type === 'deleteItem') {
     onDeleteItem(data)

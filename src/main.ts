@@ -12,13 +12,13 @@ type PluginOptions = {
   canvasIdentifier: string
   uuidIdentifier: string
   color: string
+  zIndex: string
 }
 
 const map = new Map<
   string,
   {
     elementsRef: WeakRef<VueDomElement>[]
-    color: string
   }
 >()
 
@@ -27,7 +27,7 @@ let requestID: number
 const worker = new Worker()
 
 function getComponentUUID(element: VueDomElement) {
-  return element.__vueParentComponent.ctx.$options.uuid
+  return element.__vueParentComponent?.ctx.$options.uuid
 }
 
 function getComponentSiblingElements(
@@ -63,23 +63,25 @@ function debounce<T extends (...args: any[]) => void>(
   } as T
 }
 
-function createCanvas(canvasIdentifier: string) {
+function createCanvas({
+  canvasIdentifier,
+  zIndex,
+}: Pick<PluginOptions, 'canvasIdentifier' | 'zIndex'>) {
   const canvas = document.createElement('canvas')
   canvas.width = window.innerWidth
   canvas.height = window.innerHeight
   canvas.style.position = 'fixed'
   canvas.style.inset = '0'
-  canvas.style.zIndex = '9999'
+  canvas.style.zIndex = zIndex
   canvas.style.pointerEvents = 'none'
   canvas.dataset[canvasIdentifier] = ''
   return canvas
 }
 
-function registerComponent(uuid: string, color: string) {
+function registerComponent(uuid: string) {
   if (map.has(uuid)) return
   const componentOptions = {
     elementsRef: [],
-    color,
   }
   map.set(uuid, componentOptions)
 }
@@ -128,7 +130,6 @@ function addItems() {
           left: rect.left,
           width: rect.width,
           height: rect.height,
-          color: componentOptions.color,
         }
         worker.postMessage({ type: 'addItem', uuid, options })
       }
@@ -153,6 +154,7 @@ export function createRenderPaintFlashingPlugin(
         canvasIdentifier = 'vue3_rendering_canvas_identifier',
         uuidIdentifier = 'vue3_rendering_uuid_identifier',
         color = 'green',
+        zIndex = '9999',
       } = options
 
       let isRunning = startImmediately
@@ -168,7 +170,7 @@ export function createRenderPaintFlashingPlugin(
         renderTriggered() {
           if (!isRunning) return
           const uuid = this.$options[uuidIdentifier]
-          registerComponent(uuid, color)
+          registerComponent(uuid)
 
           if (this.$el.nodeType === Node.TEXT_NODE) {
             const elements = getComponentSiblingElements(
@@ -194,10 +196,12 @@ export function createRenderPaintFlashingPlugin(
       })
 
       const start = () => {
-        const canvas = createCanvas(canvasIdentifier)
+        const canvas = createCanvas({ canvasIdentifier, zIndex })
         document.body.append(canvas)
         const offscreen = canvas.transferControlToOffscreen()
-        worker.postMessage({ type: 'start', canvas: offscreen }, [offscreen])
+        worker.postMessage({ type: 'start', canvas: offscreen, color }, [
+          offscreen,
+        ])
         requestID = requestAnimationFrame(addItems)
         isRunning = true
       }

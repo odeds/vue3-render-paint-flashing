@@ -15,5 +15,5 @@
     "outDir": "dist"
   },
   "include": ["env.d.ts", "src/**/*"],
-  "exclude": ["examples/**/*"],
+  "exclude": ["examples/**/*"]
 }
