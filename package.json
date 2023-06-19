@@ -1,6 +1,6 @@
 {
   "name": "vue3-render-paint-flashing",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "scripts": {
     "dev": "vite -c vite.dev.config.ts",
@@ -21,7 +21,14 @@
     }
   },
   "license": "MIT",
-  "homepage": "https://github.com/odeds/vue3-render-paint-flashing/blob/main/README.md",
+  "homepage": "https://github.com/odeds/vue3-render-paint-flashing",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/odeds/vue3-render-paint-flashing.git"
+  },
+  "publishConfig": {
+    "@odeds:registry": "https://npm.pkg.github.com"
+  },
   "devDependencies": {
     "@playwright/test": "^1.35.1",
     "@types/node": "^20.2.5",
