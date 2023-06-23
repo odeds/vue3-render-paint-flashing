@@ -31,7 +31,7 @@ app.mount('#app');
 | Name                      | Description                                                                         | Default                              |
 | ------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------ |
 | `startImmediately`        | Determines whether the plugin should start immediately upon installation.           | `true`                               |
-| `toggleOnOffKeybordProps` | Keyboard event properties used to toggle the plugin on and off.                     | `{ shiftKey: true,  key: 'T'}`       |
+| `toggleOnOffKeybordProps` | Keyboard event properties used to toggle the plugin on and off.                     | `{ shiftKey: true,  key: 'T' }`      |
 | `canvasIdentifier`        | Identifier for the canvas element used to display the render paint flashing effect. | `'vue3_rendering_canvas_identifier'` |
 | `uuidIdentifier`          | Identifier for uniquely identifying components during the flashing effect.          | `'vue3_rendering_uuid_identifier'`   |
 | `color`                   | The color used for highlighting re-rendered components.                             | `'green'`                            |

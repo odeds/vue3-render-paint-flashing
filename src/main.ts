@@ -1,7 +1,7 @@
 import { nextTick, type Plugin } from 'vue'
 import Worker from './worker?worker&inline'
 
-type VueDomElement = Element & { __vueParentComponent: any }
+type VueDomElement = Element & { __vueParentComponent?: any }
 
 type PluginOptions = {
   startImmediately: boolean
@@ -162,6 +162,11 @@ export function createRenderPaintFlashingPlugin(
       const getCanvas = () =>
         document.querySelector(`[data-${canvasIdentifier}]`)
 
+      const onResizeWindow = debounce(() => {
+        stop()
+        start()
+      }, 150)
+
       app.mixin({
         beforeCreate() {
           if (!isRunning) return
@@ -203,6 +208,7 @@ export function createRenderPaintFlashingPlugin(
           offscreen,
         ])
         requestID = requestAnimationFrame(addItems)
+        window.addEventListener('resize', onResizeWindow)
         isRunning = true
       }
 
@@ -212,6 +218,7 @@ export function createRenderPaintFlashingPlugin(
         canvas?.remove()
         cancelAnimationFrame(requestID)
         map.clear()
+        window.removeEventListener('resize', onResizeWindow)
         isRunning = false
       }
 
@@ -229,14 +236,6 @@ export function createRenderPaintFlashingPlugin(
           start()
         }
       })
-
-      window.addEventListener(
-        'resize',
-        debounce(() => {
-          stop()
-          start()
-        }, 200)
-      )
 
       if (startImmediately) {
         start()

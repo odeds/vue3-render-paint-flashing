@@ -64,13 +64,14 @@ const onStart = (data) => {
           options.startTimestamp = timestamp
         }
         const elapsed = timestamp - options.startTimestamp
+        const { left, top, width, height } = options
         ctx.globalAlpha = Math.min((elapsed / 500) * 0.25, 0.25)
         ctx.lineWidth = 1
         ctx.fillStyle = color
-        ctx.fillRect(options.left, options.top, options.width, options.height)
+        ctx.fillRect(left, top, width, height)
         ctx.globalAlpha = 1
         ctx.strokeStyle = color
-        ctx.strokeRect(options.left, options.top, options.width, options.height)
+        ctx.strokeRect(left, top, width, height)
         if (elapsed > 500) {
           curSet.delete(options)
         }
