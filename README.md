@@ -18,7 +18,7 @@ import { createApp } from 'vue';
 const app = createApp(...);
 
 if (process.env.NODE_ENV === 'development') {
-  import('render-paint-flashing-plugin').then(({ createRenderPaintFlashingPlugin }) => {
+  import('vue3-render-paint-flashing').then(({ createRenderPaintFlashingPlugin }) => {
     app.use(createRenderPaintFlashingPlugin());
   });
 }
