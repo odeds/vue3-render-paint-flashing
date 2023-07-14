@@ -89,7 +89,14 @@ function registerComponent(uuid: string) {
 function registerElements(uuid: string, ...elems: VueDomElement[]) {
   const componentOptions = map.get(uuid)
   componentOptions.elementsRef = [
-    ...elems.map((el) => new WeakRef(el)),
+    ...elems
+      /**
+       * Important: It should be noted that in exceptional situations,
+       * there might be null values present in certain "elems" due to the replication of multiple rapid window resizes.
+       * added filter to address this issue
+       */
+      .filter(Boolean)
+      .map((el) => new WeakRef(el)),
     ...componentOptions.elementsRef,
   ]
   map.set(uuid, componentOptions)
@@ -177,6 +184,9 @@ export function createRenderPaintFlashingPlugin(
           const uuid = this.$options[uuidIdentifier]
           registerComponent(uuid)
 
+          /**
+           * for fragments
+           */
           if (this.$el.nodeType === Node.TEXT_NODE) {
             const elements = getComponentSiblingElements(
               uuid,

@@ -63,8 +63,8 @@ const onStart = (data) => {
         if (!options.startTimestamp) {
           options.startTimestamp = timestamp
         }
-        const elapsed = timestamp - options.startTimestamp
-        const { left, top, width, height } = options
+        const { left, top, width, height, startTimestamp } = options
+        const elapsed = timestamp - startTimestamp
         ctx.globalAlpha = Math.min((elapsed / 500) * 0.25, 0.25)
         ctx.lineWidth = 1
         ctx.fillStyle = color

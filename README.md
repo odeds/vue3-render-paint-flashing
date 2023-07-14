@@ -1,5 +1,7 @@
 # vue3-render-paint-flashing
 
+_It’s important to note that the Render Paint Flashing Plugin is designed to work exclusively in Vue development mode._
+
 A Vue 3 plugin that enhances component development by visually indicating re-renders on the screen. The Render Paint Flashing Plugin highlights components that are being re-rendered during the development process. It is a helpful tool for identifying performance bottlenecks and optimizing your Vue applications.
 
 ## Motivation
